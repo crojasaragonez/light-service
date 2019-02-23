@@ -6,15 +6,7 @@ namespace crojasaragonez\LightService;
 
 abstract class Action
 {
-    protected $expects;
-    protected $promises;
-    /**
-     * Create a new Action Instance
-     */
-    public function __construct()
-    {
-        // constructor body
-    }
-
+    public $expects = [];
+    public $promises = [];
     abstract public function execute($context);
 }
