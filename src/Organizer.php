@@ -27,7 +27,7 @@ abstract class Organizer
             $instance = new $action($this->context);
             $this->checkExpectations($instance);
             $this->checkReservedKeys($instance);
-            $this->context = $instance->execute();
+            $instance->execute();
             $this->checkPromises($instance);
         }
         $this->clearReservedKeys();

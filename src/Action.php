@@ -9,11 +9,11 @@ abstract class Action
     public $expects = [];
     public $promises = [];
     public $context = [];
-    public function __construct(array $context = [])
+    public function __construct(array &$context = [])
     {
-        $this->context = $context;
+        $this->context = &$context;
     }
-    abstract public function execute(): ?array;
+    abstract public function execute();
     public function skipRemaining()
     {
         $this->context['skip_remaining'] = true;
