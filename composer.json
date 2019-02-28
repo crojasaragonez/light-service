@@ -1,12 +1,12 @@
 {
-    "name": "crojasaragonez/LightService",
+    "name": "crojasaragonez/light-service",
     "type": "library",
     "description": "Php port for https://github.com/adomokos/light-service",
     "keywords": [
         "crojasaragonez",
         "LightService"
     ],
-    "homepage": "https://github.com/crojasaragonez/LightService",
+    "homepage": "https://github.com/crojasaragonez/light-service",
     "license": "MIT",
     "authors": [
         {

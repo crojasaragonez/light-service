@@ -7,22 +7,7 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-**Note:** Replace ```Carlos Luis Rojas Aragonés``` ```crojasaragonez``` ```http://go-labs.net``` ```crojas@go-labs.net``` ```crojasaragonez``` ```LightService``` ```Php port for https://github.com/adomokos/light-service``` with their correct values in [README.md](README.md), [CHANGELOG.md](CHANGELOG.md), [CONTRIBUTING.md](CONTRIBUTING.md), [LICENSE.md](LICENSE.md) and [composer.json](composer.json) files, then delete this line. You can run `$ php prefill.php` in the command line to make all replacements at once. Delete the file prefill.php as well.
-
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what
-PSRs you support to avoid any confusion with users and contributors.
-
-## Structure
-
-If any of the following are applicable to your project, then the directory structure should follow industry best practices by being named the following.
-
-```
-bin/        
-config/
-src/
-tests/
-vendor/
-```
+Php port for https://github.com/adomokos/light-service
 
 
 ## Install
@@ -30,14 +15,68 @@ vendor/
 Via Composer
 
 ``` bash
-$ composer require crojasaragonez/LightService
+$ composer require crojasaragonez/light-service
 ```
 
 ## Usage
 
 ``` php
-$skeleton = new crojasaragonez\LightService();
-echo $skeleton->echoPhrase('Hello, League!');
+require_once 'vendor/autoload.php';
+
+use crojasaragonez\LightService\Action;
+use crojasaragonez\LightService\Organizer;
+
+class FileOps extends Organizer
+{
+    public function __construct(array $context = [])
+    {
+        parent::__construct($context);
+    }
+}
+
+class CreateTmpFile extends Action
+{
+    public $promises = ['file_path'];
+    public function execute()
+    {
+        $this->context['file_path'] = tempnam(sys_get_temp_dir(), 'img_') . '.png';
+    }
+}
+
+class Download extends Action
+{
+    public $expects  = ['url', 'file_path'];
+    public function execute()
+    {
+        if (!@file_put_contents($this->context['file_path'], file_get_contents($this->context['url']))) {
+            $this->skipRemaining();
+        }
+    }
+}
+
+class ZipFile extends Action
+{
+    public $expects  = ['file_path'];
+    public $promises = ['zip_path'];
+    public function execute()
+    {
+        $zip_path = str_replace('.png', '.zip', $this->context['file_path']);
+        $zip = new ZipArchive();
+        $zip->open($zip_path, ZipArchive::CREATE);
+        $zip->addFile($this->context['file_path'], basename($this->context['file_path']));
+        $zip->close();
+        $this->context['zip_path'] = $zip_path;
+    }
+}
+
+$organizer = new FileOps(['url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/PHP-logo.svg/100px-PHP-logo.svg.png']);
+$result = $organizer->reduce([
+  CreateTmpFile::class,
+  Download::class,
+  ZipFile::class
+]);
+
+print_r($result);
 ```
 
 ## Change log
@@ -67,17 +106,17 @@ If you discover any security related issues, please email crojas@go-labs.net ins
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/crojasaragonez/LightService.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/crojasaragonez/light-service.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/crojasaragonez/LightService/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/crojasaragonez/LightService.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/crojasaragonez/LightService.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/crojasaragonez/LightService.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/crojasaragonez/light-service/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/crojasaragonez/light-service.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/crojasaragonez/light-service.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/crojasaragonez/light-service.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/crojasaragonez/LightService
-[link-travis]: https://travis-ci.org/crojasaragonez/LightService
-[link-scrutinizer]: https://scrutinizer-ci.com/g/crojasaragonez/LightService/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/crojasaragonez/LightService
-[link-downloads]: https://packagist.org/packages/crojasaragonez/LightService
+[link-packagist]: https://packagist.org/packages/crojasaragonez/light-service
+[link-travis]: https://travis-ci.org/crojasaragonez/light-service
+[link-scrutinizer]: https://scrutinizer-ci.com/g/crojasaragonez/light-service/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/crojasaragonez/light-service
+[link-downloads]: https://packagist.org/packages/crojasaragonez/light-service
 [link-author]: https://github.com/crojasaragonez
 [link-contributors]: ../../contributors
