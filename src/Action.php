@@ -8,7 +8,7 @@ abstract class Action
 {
     public $expects = [];
     public $promises = [];
-    public $context = [];
+    public $context;
     public function __construct(array &$context = [])
     {
         $this->context = &$context;
