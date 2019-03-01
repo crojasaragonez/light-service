@@ -10,7 +10,6 @@ abstract class Organizer
     const RESERVED_KEYS  = [self::SKIP_REMAINING];
 
     public $context;
-
     public function __construct(array $context = [])
     {
         $this->context = $context;
@@ -27,14 +26,6 @@ abstract class Organizer
             $instance->execute();
             PostProcessor::validate($this, $instance);
         }
-        $this->clearReservedKeys();
-        return $this->context;
-    }
-
-    private function clearReservedKeys()
-    {
-        foreach (self::RESERVED_KEYS as $reserved_key) {
-            unset($this->context[$reserved_key]);
-        }
+        return ContextHelper::removeReservedKeys(Organizer::RESERVED_KEYS, $this->context);
     }
 }
