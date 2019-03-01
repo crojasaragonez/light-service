@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace crojasaragonez\LightService;
 
-use Exception;
-
 class PreProcessor
 {
     private $organizer;
@@ -25,20 +23,18 @@ class PreProcessor
 
     private function checkExpectations()
     {
-        foreach ($this->action->expects as $key) {
-            if (!isset($this->organizer->context[$key])) {
-                throw new Exception("expected '$key' to be in the context during " . get_class($this->action), 1);
-            }
+        $missing_keys = ContextHelper::missingKeys($this->action->expects, $this->organizer->context);
+        if ($missing_keys) {
+            throw new \Exception("expected '$missing_keys' to be in the context during " . get_class($this->action));
         }
     }
 
     private function checkReservedKeys()
     {
-        $actual_keys = array_merge($this->action->expects, $this->action->promises);
-        foreach ($actual_keys as $key) {
-            if (in_array($key, Organizer::RESERVED_KEYS)) {
-                throw new Exception("promised or expected keys cannot be a reserved key ('$key')", 1);
-            }
+        $action_keys = array_merge($this->action->expects, $this->action->promises);
+        $reserved_keys_in_use = ContextHelper::forbiddenKeys(Organizer::RESERVED_KEYS, $action_keys);
+        if ($reserved_keys_in_use) {
+            throw new \Exception("promised or expected keys cannot be a reserved key ('$reserved_keys_in_use')");
         }
     }
 }

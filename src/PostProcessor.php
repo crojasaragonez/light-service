@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace crojasaragonez\LightService;
 
-use Exception;
-
 class PostProcessor
 {
     private $organizer;
@@ -24,10 +22,9 @@ class PostProcessor
 
     private function checkPromises()
     {
-        foreach ($this->action->promises as $key) {
-            if (!isset($this->organizer->context[$key])) {
-                throw new Exception("promised '$key' to be in the context during " . get_class($this->action), 1);
-            }
+        $missing_keys = ContextHelper::missingKeys($this->action->promises, $this->organizer->context);
+        if ($missing_keys) {
+            throw new \Exception("promised '$missing_keys' to be in the context during " . get_class($this->action));
         }
     }
 }
