@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace crojasaragonez\LightService;
 
-abstract class Organizer
+class Organizer
 {
     const SKIP_REMAINING = 'skip_remaining';
     const RESERVED_KEYS  = [self::SKIP_REMAINING];

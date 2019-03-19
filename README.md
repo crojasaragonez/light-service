@@ -26,14 +26,6 @@ require_once 'vendor/autoload.php';
 use crojasaragonez\LightService\Action;
 use crojasaragonez\LightService\Organizer;
 
-class FileOps extends Organizer
-{
-    public function __construct(array $context = [])
-    {
-        parent::__construct($context);
-    }
-}
-
 class CreateTmpFile extends Action
 {
     public $promises = ['file_path'];
@@ -69,7 +61,7 @@ class ZipFile extends Action
     }
 }
 
-$organizer = new FileOps(['url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/PHP-logo.svg/100px-PHP-logo.svg.png']);
+$organizer = new Organizer(['url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/PHP-logo.svg/100px-PHP-logo.svg.png']);
 $result = $organizer->reduce([
   CreateTmpFile::class,
   Download::class,

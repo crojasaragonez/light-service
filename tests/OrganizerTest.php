@@ -12,7 +12,7 @@ class OrganizerTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        self::$organizer = new TestOrganizer();
+        self::$organizer = new Organizer();
     }
 
     /**
@@ -28,7 +28,7 @@ class OrganizerTest extends \PHPUnit\Framework\TestCase
      */
     public function testReduceWithExpectationsAndPromisesMet()
     {
-        self::$organizer = new TestOrganizer(['foo' => 1]);
+        self::$organizer = new Organizer(['foo' => 1]);
         $this->assertEquals(self::$organizer->reduce([ValidAction::class]), ['foo' => 1, 'bar' => 1]);
     }
 
@@ -64,7 +64,7 @@ class OrganizerTest extends \PHPUnit\Framework\TestCase
      */
     public function testThatOrganizerRemovesAllReservedKeysBeforeFinishing()
     {
-        self::$organizer = new TestOrganizer([Organizer::SKIP_REMAINING => 1]);
+        self::$organizer = new Organizer([Organizer::SKIP_REMAINING => 1]);
         $this->assertEquals(self::$organizer->reduce([SkipAction::class,
                                                       ValidAction::class]), []);
     }
