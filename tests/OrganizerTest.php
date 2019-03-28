@@ -51,6 +51,14 @@ class OrganizerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test that organizer skips promise validation when skipRemaining was called
+     */
+    public function testReduceWithSkipRemainingBrokenPromises()
+    {
+        $this->assertEquals(self::$organizer->reduce([SkipInvalidAction::class]), []);
+    }
+
+    /**
      * Test that organizer skips actions once the flag skip_remaining is set to true
      */
     public function testThatOrganizerSkipsActionsWhenFlagSkipRemainingIsTrue()

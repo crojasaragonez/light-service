@@ -8,7 +8,7 @@ class ValidAction extends Action
 {
     public $expects  = ['foo'];
     public $promises = ['bar'];
-    public function execute(): ?array
+    public function execute()
     {
         $this->context['bar'] = 1;
         return $this->context;
