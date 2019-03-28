@@ -11,5 +11,6 @@ class ValidAction extends Action
     public function execute()
     {
         $this->context['bar'] = 1;
+        return $this->context;
     }
 }

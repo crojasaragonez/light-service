@@ -36,7 +36,6 @@ class ActionTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteReturnsValidContext()
     {
-        self::$action->execute([]);
-        $this->assertEquals(self::$action->context, ['bar' => 1]);
+        $this->assertEquals(self::$action->execute([]), ['bar' => 1]);
     }
 }

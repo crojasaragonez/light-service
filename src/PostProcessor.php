@@ -17,8 +17,7 @@ class PostProcessor
     public static function validate(Organizer $organizer, Action $action)
     {
         $instance = new self($organizer, $action);
-        $context = $action->context;
-        if ($context[Organizer::SKIP_REMAINING] ?? false) {
+        if ($action->context[Organizer::SKIP_REMAINING] ?? false) {
             return;
         }
         $instance->checkPromises();
