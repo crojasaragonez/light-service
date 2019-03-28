@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace crojasaragonez\LightService;
 
-class ActionWithReservedKey extends Action
+class SkipInvalidAction extends Action
 {
-    public $promises = ['skip_remaining'];
+    public $promises = ['bar'];
     public function execute()
     {
+        $this->skipRemaining();
     }
 }

@@ -7,8 +7,7 @@ namespace crojasaragonez\LightService;
 class InvalidAction extends Action
 {
     public $promises = ['bar'];
-    public function execute(): ?array
+    public function execute()
     {
-        return $this->context;
     }
 }
