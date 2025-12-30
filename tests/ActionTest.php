@@ -18,8 +18,8 @@ class ActionTest extends \PHPUnit\Framework\TestCase
      */
     public function testClassAttributes()
     {
-        $this->assertClassHasAttribute('expects', ValidAction::class);
-        $this->assertClassHasAttribute('promises', ValidAction::class);
+        $this->assertTrue(property_exists(ValidAction::class, 'expects'));
+        $this->assertTrue(property_exists(ValidAction::class, 'promises'));
     }
 
     /**
