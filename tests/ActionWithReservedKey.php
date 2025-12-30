@@ -6,8 +6,10 @@ namespace crojasaragonez\LightService;
 
 class ActionWithReservedKey extends Action
 {
-    public $promises = ['skip_remaining'];
-    public function execute()
+    /** @var array<string> */
+    public array $promises = ['skip_remaining'];
+
+    public function execute(): void
     {
     }
 }

@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace crojasaragonez\LightService;
 
-class ContextHelperTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class ContextHelperTest extends TestCase
 {
     /**
      * Test that missingKeys returns the right value when all expected keys are present
      */
-    public function testmissingKeysWhenAllExpectedKeysArePresent()
+    public function testMissingKeysWhenAllExpectedKeysArePresent(): void
     {
         $expected = ['a', 'b', 'c'];
-        $context  = ['a' => 1, 'b' => 2, 'c' => 3];
+        $context = ['a' => 1, 'b' => 2, 'c' => 3];
         $missing_keys = ContextHelper::missingKeys($expected, $context);
         $this->assertEquals($missing_keys, '');
     }
@@ -20,10 +22,10 @@ class ContextHelperTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that missingKeys returns the right value when all expected keys are missing
      */
-    public function testmissingKeysWhenAllExpectedKeysAreMissing()
+    public function testMissingKeysWhenAllExpectedKeysAreMissing(): void
     {
         $expected = ['a', 'b', 'c'];
-        $context  = [];
+        $context = [];
         $missing_keys = ContextHelper::missingKeys($expected, $context);
         $this->assertEquals($missing_keys, 'a, b, c');
     }
@@ -31,10 +33,10 @@ class ContextHelperTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that missingKeys returns the right value when some expected keys are missing
      */
-    public function testmissingKeysWhenSomeExpectedKeysAreMissing()
+    public function testMissingKeysWhenSomeExpectedKeysAreMissing(): void
     {
         $expected = ['a', 'b', 'c'];
-        $context  = ['c' => 3];
+        $context = ['c' => 3];
         $missing_keys = ContextHelper::missingKeys($expected, $context);
         $this->assertEquals($missing_keys, 'a, b');
     }
@@ -42,10 +44,10 @@ class ContextHelperTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that forbiddenKeys returns the right value when no forbidden keys are present
      */
-    public function testforbiddenKeysWhenNoForbiddenKeysArePresent()
+    public function testForbiddenKeysWhenNoForbiddenKeysArePresent(): void
     {
         $reserved_keys = ['a', 'b', 'c'];
-        $current_keys  = ['d'];
+        $current_keys = ['d'];
         $forbidden_keys = ContextHelper::forbiddenKeys($reserved_keys, $current_keys);
         $this->assertEquals($forbidden_keys, '');
     }
@@ -53,10 +55,10 @@ class ContextHelperTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that forbiddenKeys returns the right value when all forbidden keys are present
      */
-    public function testforbiddenKeysWhenAllForbiddenKeysArePresent()
+    public function testForbiddenKeysWhenAllForbiddenKeysArePresent(): void
     {
         $reserved_keys = ['a', 'b', 'c'];
-        $current_keys  = ['c', 'b', 'a'];
+        $current_keys = ['c', 'b', 'a'];
         $forbidden_keys = ContextHelper::forbiddenKeys($reserved_keys, $current_keys);
         $this->assertEquals($forbidden_keys, 'a, b, c');
     }
@@ -64,10 +66,10 @@ class ContextHelperTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that forbiddenKeys returns the right value when some forbidden keys are present
      */
-    public function testforbiddenKeysWhenSomeForbiddenKeysArePresent()
+    public function testForbiddenKeysWhenSomeForbiddenKeysArePresent(): void
     {
         $reserved_keys = ['a', 'b', 'c'];
-        $current_keys  = ['b'];
+        $current_keys = ['b'];
         $forbidden_keys = ContextHelper::forbiddenKeys($reserved_keys, $current_keys);
         $this->assertEquals($forbidden_keys, 'b');
     }
@@ -75,10 +77,10 @@ class ContextHelperTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that removeReservedKeys removes the desired keys from the context when present
      */
-    public function testremoveReservedKeysWhenReservedKeysArePresent()
+    public function testRemoveReservedKeysWhenReservedKeysArePresent(): void
     {
         $reserved_keys = ['a', 'b', 'c'];
-        $context  = ['c' => 3];
+        $context = ['c' => 3];
         $result = ContextHelper::removeReservedKeys($reserved_keys, $context);
         $this->assertEquals($result, []);
     }
@@ -86,10 +88,10 @@ class ContextHelperTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that removeReservedKeys does nothing when no reserved keys are present in the context
      */
-    public function testremoveReservedKeysWhenReservedKeysAreNotPresent()
+    public function testRemoveReservedKeysWhenReservedKeysAreNotPresent(): void
     {
         $reserved_keys = ['a', 'b', 'c'];
-        $context  = ['d' => 3];
+        $context = ['d' => 3];
         $result = ContextHelper::removeReservedKeys($reserved_keys, $context);
         $this->assertEquals($result, ['d' => 3]);
     }
