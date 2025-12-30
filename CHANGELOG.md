@@ -4,6 +4,13 @@ All notable changes to `LightService` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## [2.1.0] - 2025-12-30
+
+### Added
+- Progress callback support in `Organizer::reduce()` method
+- Optional `$onProgress` callback parameter to track action execution progress
+- Callback receives: `$current` (processed count), `$total` (total actions), `$action` (class name), `$skipped` (boolean)
+
 ## [2.0.0] - 2025-12-30
 
 ### Changed

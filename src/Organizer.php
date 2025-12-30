@@ -24,18 +24,28 @@ class Organizer
 
     /**
      * @param array<class-string<Action>> $actions
+     * @param callable(int $current, int $total, class-string<Action> $action, bool $skipped): void|null $onProgress
      * @return array<string, mixed>|null
      */
-    public function reduce(array $actions = []): ?array
+    public function reduce(array $actions = [], ?callable $onProgress = null): ?array
     {
+        $total = count($actions);
+        $current = 0;
+
         foreach ($actions as $action) {
-            if ($this->context[self::SKIP_REMAINING] ?? false) {
-                continue;
+            $skipped = $this->context[self::SKIP_REMAINING] ?? false;
+
+            if (!$skipped) {
+                $instance = new $action($this->context);
+                PreProcessor::validate($this, $instance);
+                $instance->execute();
+                PostProcessor::validate($this, $instance);
             }
-            $instance = new $action($this->context);
-            PreProcessor::validate($this, $instance);
-            $instance->execute();
-            PostProcessor::validate($this, $instance);
+
+            $current++;
+            if ($onProgress !== null) {
+                $onProgress($current, $total, $action, $skipped);
+            }
         }
         return ContextHelper::removeReservedKeys(self::RESERVED_KEYS, $this->context);
     }

@@ -84,4 +84,70 @@ class OrganizerTest extends TestCase
         $this->expectException(Exception::class);
         self::$organizer->reduce([ActionWithReservedKey::class]);
     }
+
+    /**
+     * Test that progress callback is called with correct values
+     */
+    public function testProgressCallbackIsCalledWithCorrectValues(): void
+    {
+        self::$organizer = new Organizer(['foo' => 1]);
+        $progressCalls = [];
+
+        self::$organizer->reduce(
+            [ValidAction::class],
+            function (int $current, int $total, string $action, bool $skipped) use (&$progressCalls) {
+                $progressCalls[] = compact('current', 'total', 'action', 'skipped');
+            }
+        );
+
+        $this->assertCount(1, $progressCalls);
+        $this->assertEquals(1, $progressCalls[0]['current']);
+        $this->assertEquals(1, $progressCalls[0]['total']);
+        $this->assertEquals(ValidAction::class, $progressCalls[0]['action']);
+        $this->assertFalse($progressCalls[0]['skipped']);
+    }
+
+    /**
+     * Test that progress callback tracks multiple actions correctly
+     */
+    public function testProgressCallbackTracksMultipleActions(): void
+    {
+        self::$organizer = new Organizer(['foo' => 1]);
+        $progressCalls = [];
+
+        self::$organizer->reduce(
+            [ValidAction::class, ValidAction::class],
+            function (int $current, int $total, string $action, bool $skipped) use (&$progressCalls) {
+                $progressCalls[] = compact('current', 'total', 'action', 'skipped');
+            }
+        );
+
+        $this->assertCount(2, $progressCalls);
+        $this->assertEquals(1, $progressCalls[0]['current']);
+        $this->assertEquals(2, $progressCalls[0]['total']);
+        $this->assertEquals(2, $progressCalls[1]['current']);
+        $this->assertEquals(2, $progressCalls[1]['total']);
+    }
+
+    /**
+     * Test that progress callback reports skipped actions correctly
+     */
+    public function testProgressCallbackReportsSkippedActions(): void
+    {
+        self::$organizer = new Organizer(['foo' => 1]);
+        $progressCalls = [];
+
+        self::$organizer->reduce(
+            [SkipAction::class, ValidAction::class],
+            function (int $current, int $total, string $action, bool $skipped) use (&$progressCalls) {
+                $progressCalls[] = compact('current', 'total', 'action', 'skipped');
+            }
+        );
+
+        $this->assertCount(2, $progressCalls);
+        $this->assertFalse($progressCalls[0]['skipped']);
+        $this->assertEquals(SkipAction::class, $progressCalls[0]['action']);
+        $this->assertTrue($progressCalls[1]['skipped']);
+        $this->assertEquals(ValidAction::class, $progressCalls[1]['action']);
+    }
 }
