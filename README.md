@@ -71,6 +71,27 @@ $result = $organizer->reduce([
 print_r($result);
 ```
 
+### Progress Tracking
+
+You can track the progress of action execution by passing a callback to `reduce()`:
+
+``` php
+$organizer = new Organizer(['url' => 'https://example.com/image.png']);
+$result = $organizer->reduce([
+  CreateTmpFile::class,
+  Download::class,
+  ZipFile::class
+], function(int $current, int $total, string $action, bool $skipped) {
+    echo "[{$current}/{$total}] {$action}" . ($skipped ? ' (skipped)' : '') . "\n";
+});
+```
+
+The callback receives:
+- `$current` - Number of actions processed so far (1-indexed)
+- `$total` - Total number of actions
+- `$action` - The class name of the action just processed
+- `$skipped` - Whether the action was skipped (due to `skipRemaining()`)
+
 ## Change log
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
