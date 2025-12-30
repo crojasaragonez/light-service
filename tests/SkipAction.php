@@ -6,7 +6,7 @@ namespace crojasaragonez\LightService;
 
 class SkipAction extends Action
 {
-    public function execute()
+    public function execute(): void
     {
         $this->skipRemaining();
     }

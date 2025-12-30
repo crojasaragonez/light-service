@@ -6,8 +6,10 @@ namespace crojasaragonez\LightService;
 
 class InvalidAction extends Action
 {
-    public $promises = ['bar'];
-    public function execute()
+    /** @var array<string> */
+    public array $promises = ['bar'];
+
+    public function execute(): void
     {
     }
 }

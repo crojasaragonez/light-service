@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace crojasaragonez\LightService;
 
 use Exception;
+use PHPUnit\Framework\TestCase;
 
-class OrganizerTest extends \PHPUnit\Framework\TestCase
+class OrganizerTest extends TestCase
 {
-    protected static $organizer;
+    protected static Organizer $organizer;
 
     protected function setUp(): void
     {
@@ -18,7 +19,7 @@ class OrganizerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that organizer does not fail when no actions were given
      */
-    public function testReduceWithEmptyActions()
+    public function testReduceWithEmptyActions(): void
     {
         $this->assertEquals(self::$organizer->reduce(), []);
     }
@@ -26,7 +27,7 @@ class OrganizerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that expectation and promises are all met
      */
-    public function testReduceWithExpectationsAndPromisesMet()
+    public function testReduceWithExpectationsAndPromisesMet(): void
     {
         self::$organizer = new Organizer(['foo' => 1]);
         $this->assertEquals(self::$organizer->reduce([ValidAction::class]), ['foo' => 1, 'bar' => 1]);
@@ -35,7 +36,7 @@ class OrganizerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that organizer raises an error when expectations are missing
      */
-    public function testReduceWithMissingExpectations()
+    public function testReduceWithMissingExpectations(): void
     {
         $this->expectException(Exception::class);
         self::$organizer->reduce([ValidAction::class]);
@@ -44,7 +45,7 @@ class OrganizerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that organizer raises an error when promises broken :(
      */
-    public function testReduceWithBrokenPromises()
+    public function testReduceWithBrokenPromises(): void
     {
         $this->expectException(Exception::class);
         self::$organizer->reduce([InvalidAction::class]);
@@ -53,7 +54,7 @@ class OrganizerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that organizer skips promise validation when skipRemaining was called
      */
-    public function testReduceWithSkipRemainingBrokenPromises()
+    public function testReduceWithSkipRemainingBrokenPromises(): void
     {
         $this->assertEquals(self::$organizer->reduce([SkipInvalidAction::class]), []);
     }
@@ -61,27 +62,24 @@ class OrganizerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that organizer skips actions once the flag skip_remaining is set to true
      */
-    public function testThatOrganizerSkipsActionsWhenFlagSkipRemainingIsTrue()
+    public function testThatOrganizerSkipsActionsWhenFlagSkipRemainingIsTrue(): void
     {
-        $this->assertEquals(self::$organizer->reduce([SkipAction::class,
-                                                      ValidAction::class]), []);
+        $this->assertEquals(self::$organizer->reduce([SkipAction::class, ValidAction::class]), []);
     }
 
     /**
      * Test that the organizer removes all reserved keys before finishing
      */
-    public function testThatOrganizerRemovesAllReservedKeysBeforeFinishing()
+    public function testThatOrganizerRemovesAllReservedKeysBeforeFinishing(): void
     {
         self::$organizer = new Organizer([Organizer::SKIP_REMAINING => 1]);
-        $this->assertEquals(self::$organizer->reduce([SkipAction::class,
-                                                      ValidAction::class]), []);
+        $this->assertEquals(self::$organizer->reduce([SkipAction::class, ValidAction::class]), []);
     }
-
 
     /**
      * Test that organizer raises an exception when there is an action with a reserved key
      */
-    public function testThatOrganizerRaisesExceptionWhereReservedKeysAreUsed()
+    public function testThatOrganizerRaisesExceptionWhereReservedKeysAreUsed(): void
     {
         $this->expectException(Exception::class);
         self::$organizer->reduce([ActionWithReservedKey::class]);
