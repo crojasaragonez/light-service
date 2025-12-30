@@ -6,11 +6,14 @@ namespace crojasaragonez\LightService;
 
 class ValidAction extends Action
 {
-    public $expects  = ['foo'];
-    public $promises = ['bar'];
-    public function execute()
+    /** @var array<string> */
+    public array $expects = ['foo'];
+
+    /** @var array<string> */
+    public array $promises = ['bar'];
+
+    public function execute(): void
     {
         $this->context['bar'] = 1;
-        return $this->context;
     }
 }
