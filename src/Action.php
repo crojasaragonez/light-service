@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace crojasaragonez\LightService;
 
+use crojasaragonez\LightService\Attributes\Expects;
+use crojasaragonez\LightService\Attributes\Promises;
+
 abstract class Action
 {
     /** @var array<string> */
@@ -17,6 +20,14 @@ abstract class Action
     public function __construct(array &$context = [])
     {
         $this->context = &$context;
+        $this->expects = AttributeResolver::merge(
+            AttributeResolver::keysFor($this, Expects::class),
+            $this->expects
+        );
+        $this->promises = AttributeResolver::merge(
+            AttributeResolver::keysFor($this, Promises::class),
+            $this->promises
+        );
     }
 
     abstract public function execute(): void;
