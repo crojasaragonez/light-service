@@ -4,6 +4,17 @@ All notable changes to `LightService` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## [2.2.0] - 2026-09-17
+
+### Added
+- `Expects` and `Promises` attributes as an alternative to the `$expects` and `$promises` properties
+- Attributes accept several keys, can be repeated, and are inherited from parent actions
+- `AttributeResolver` class, which collects the keys declared by attributes on an action and its ancestors
+
+### Fixed
+- Minimum PHP version corrected to 8.3, which is what the code has required since 2.0.0 introduced typed
+  class constants. Nothing new is dropped: 2.0.0 and 2.1.0 never ran on 8.2.
+
 ## [2.1.0] - 2025-12-30
 
 ### Added

@@ -71,6 +71,45 @@ $result = $organizer->reduce([
 print_r($result);
 ```
 
+### Attributes
+
+Instead of the `$expects` and `$promises` properties, the same keys can be declared with the
+`Expects` and `Promises` attributes:
+
+``` php
+use crojasaragonez\LightService\Action;
+use crojasaragonez\LightService\Attributes\Expects;
+use crojasaragonez\LightService\Attributes\Promises;
+
+#[Expects('file_path')]
+#[Promises('zip_path')]
+class ZipFile extends Action
+{
+    public function execute(): void
+    {
+        // ...
+    }
+}
+```
+
+Both attributes take any number of keys and can be repeated, so these three declarations mean the same thing:
+
+``` php
+#[Expects('url', 'file_path')]
+
+#[Expects('url')]
+#[Expects('file_path')]
+
+public array $expects = ['url', 'file_path'];
+```
+
+A few things worth knowing:
+
+- Attributes and properties can be mixed. The keys are merged, attribute keys first, and duplicates are dropped.
+- Attributes declared on a parent action are inherited, and its keys come before the ones of the child.
+- Everything else is unchanged: the resolved keys are validated by the organizer exactly as before, and
+  `$action->expects` / `$action->promises` still report the full list once the action is instantiated.
+
 ### Progress Tracking
 
 You can track the progress of action execution by passing a callback to `reduce()`:
